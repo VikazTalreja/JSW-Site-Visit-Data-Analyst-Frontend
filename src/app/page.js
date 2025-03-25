@@ -72,7 +72,7 @@ export default function Home() {
       {/* Header */}
       <div className="bg-gray-100 text-black font-bold px-6 py-4 shadow-md">
         <div className="max-w-xl mx-auto flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">JSW Steel Sales Insight Assistant</h1>
+          <h1 className="text-2xl font-semibold">JSW Site Visit Data Analyst</h1>
          </div>
       </div>
 
