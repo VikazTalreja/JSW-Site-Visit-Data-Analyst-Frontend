@@ -98,9 +98,41 @@ export default function Home() {
                   <div className="text-sm mb-1 text-gray-500">
                     {message?.role === 'user' ? 'You' : 'JSW Assistant'}
                   </div>
-                  <div className="prose prose-sm max-w-none whitespace-pre-wrap prose-table:border prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:p-2 prose-td:border prose-td:border-gray-300 prose-td:p-2">
+                  <div className={`prose prose-sm max-w-none whitespace-pre-wrap ${
+                    message?.role === 'user'
+                      ? 'prose-invert'
+                      : 'prose-table:border-collapse prose-table:w-full prose-thead:bg-gray-100 prose-th:border prose-th:border-gray-300 prose-th:p-2 prose-th:text-left prose-td:border prose-td:border-gray-300 prose-td:p-2 prose-td:align-top'
+                  }`}>
                     <ReactMarkdown 
                       remarkPlugins={[remarkGfm]}
+                      components={{
+                        table: ({node, ...props}) => (
+                          <div className="overflow-x-auto my-4">
+                            <table className="min-w-full divide-y divide-gray-300" {...props} />
+                          </div>
+                        ),
+                        thead: ({node, ...props}) => (
+                          <thead className="bg-gray-100" {...props} />
+                        ),
+                        th: ({node, ...props}) => (
+                          <th 
+                            className="px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border border-gray-300" 
+                            {...props} 
+                          />
+                        ),
+                        td: ({node, ...props}) => (
+                          <td 
+                            className="px-3 py-2 whitespace-normal text-sm text-gray-700 border border-gray-300" 
+                            {...props} 
+                          />
+                        ),
+                        tr: ({node, isHeader, ...props}) => (
+                          <tr 
+                            className={`${isHeader ? 'bg-gray-100' : props.index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+                            {...props} 
+                          />
+                        )
+                      }}
                     >
                       {message?.content || 'No content available'}
                     </ReactMarkdown>
