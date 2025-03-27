@@ -29,10 +29,15 @@ export default function Home() {
     setPixels(newPixels);
   }, []);
 
+      // Use environment variables for validation
+      const validEmail = process.env.NEXT_PUBLIC_USER_EMAIL; // Use NEXT_PUBLIC_ prefix for client-side access
+      const validPassword = process.env.NEXT_PUBLIC_USER_PASSWORD;
+
+      
   const handleLogin = (e) => {
     e.preventDefault();
     setError('');
-    if (username === 'jswuser1@demo.com' && password === '12345678') {
+    if (username === validEmail && password === validPassword) {
 
       localStorage.setItem('loggedIn', 'true');
       router.push('/chat');
@@ -78,9 +83,6 @@ export default function Home() {
           >
             Sign In
           </button>
-          <p className="mt-4 text-xs text-gray-400 text-center">
-            Demo credentials: jswuser1@demo.com / 1234678
-          </p>
         </form>
       </div>
 
