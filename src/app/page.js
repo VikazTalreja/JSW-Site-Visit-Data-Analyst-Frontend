@@ -14,6 +14,7 @@ export default function Home() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [chartData, setChartData] = useState(null);
+  const [selectedModel, setSelectedModel] = useState('gpt-4o-mini');
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -35,32 +36,45 @@ export default function Home() {
     setChartData(null); // Reset chart data for new query
 
     try {
+      console.log(`Sending request to model: ${selectedModel}`);
+      
+      // Use the regular API endpoint for now (not streaming)
       const response = await fetch('https://jsw-site-visit-data-analyst-backend.onrender.com/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messages: [...messages, newMessage],
+          message: input,
+          conversation: messages,
+          model: selectedModel
         }),
       });
 
-      const data = await response.json();
-      
-      // Handle assistant response
-      if (data.response) {
-        setMessages(prev => [...prev, data.response]);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to get response from server');
       }
 
-      // Handle chart data if present
+      const data = await response.json();
+      console.log('Received response:', data);
+      
+      // Handle the response object format
+      if (data.response) {
+        // Add assistant's response to messages
+        setMessages(prev => [...prev, data.response]);
+      }
+      
+      // Set chart data if available
       if (data.chartData) {
+        console.log('Setting chart data:', data.chartData);
         setChartData(data.chartData);
       }
     } catch (error) {
       console.error('Error:', error);
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Sorry, there was an error processing your request.'
+        content: `Sorry, there was an error: ${error.message}`
       }]);
     } finally {
       setIsLoading(false);
@@ -134,7 +148,7 @@ export default function Home() {
                         )
                       }}
                     >
-                      {message?.content || 'No content available'}
+                      {message?.content}
                     </ReactMarkdown>
                   </div>
                 </div>
