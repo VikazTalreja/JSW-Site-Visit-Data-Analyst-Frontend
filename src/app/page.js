@@ -37,9 +37,9 @@ export default function Home() {
   const handleLogin = (e) => {
     e.preventDefault();
     setError('');
-    if (username === 'jswuser2@demo.com'
-      && password === '12345') {
-
+    if (username === validEmail
+      && password === validPassword) {
+        
       localStorage.setItem('loggedIn', 'true');
       router.push('/chat');
     } else {
