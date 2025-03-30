@@ -45,7 +45,7 @@ export default function Home() {
         setChartData(null);
 
         try {
-            const response = await fetch('https://jsw-lang-chatbot.onrender.com', {
+            const response = await fetch('https://jsw-lang-chatbot.onrender.com/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
